@@ -28,7 +28,7 @@ resource "google_compute_instance" "wordpress_dev" {
   count        = var.env == "dev" ? 1 : 0  # Only create in dev environment
   name         = "wordpress-dev"
   machine_type = "e2-micro"  
-  zone         = var.region
+  zone         = var.zone
   tags         = ["wordpress", "http-server", "https-server"]
   boot_disk {
     initialize_params {

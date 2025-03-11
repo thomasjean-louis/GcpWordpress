@@ -24,6 +24,12 @@ variable "region" {
   default     = "europe-west4"
 }
 
+variable "zone" {
+  description = "GCP zone"
+  type        = string
+  default     = "europe-west4-a"
+}
+
 
 variable "domain" {
   description = "Domain name for the website"
