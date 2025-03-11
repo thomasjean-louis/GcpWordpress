@@ -1,8 +1,15 @@
 provider "google" {
   credentials = jsondecode(var.gcp_credentials) # GCP credentials from GitHub secrets
   project     = var.gcp_project_id        # GCP project ID for dev/prod
-  region      = var.region          
+  region      = var.region       
+       
 }
+
+terraform {
+  backend "gcs" {}
+}
+
+
 
 provider "cloudflare" {
   api_token = var.cloudflare_api_token
