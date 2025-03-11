@@ -32,7 +32,7 @@ resource "google_compute_instance" "wordpress_dev" {
   tags         = ["wordpress", "http-server", "https-server"]
   boot_disk {
     initialize_params {
-      image = "debian-cloud/debian-11-bullseye-v20220125"  # A base OS image
+      image = "debian-cloud/debian-11-bullseye-v20250212"  # Base OS image
     }
   }
 
