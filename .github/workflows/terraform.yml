@@ -24,7 +24,6 @@ jobs:
 
 
     steps:
-      - run: 'echo "TF_VAR_gcp_credentials: ${{ env.TF_VAR_gcp_credentials }}"'
       - name: Checkout Repo
         uses: actions/checkout@v4
 
