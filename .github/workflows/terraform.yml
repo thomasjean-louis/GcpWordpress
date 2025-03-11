@@ -38,7 +38,7 @@ jobs:
           credentials_json: ${{ env.TF_VAR_gcp_credentials }}
 
       - name: Initialize Terraform
-        run: terraform init
+        run: terraform init -backend-config="bucket=wordpress-terraform-bucket-${{env.TF_VAR_env}}" -backend-config="prefix=terraform/state" -backend-config="region=us-central1" 
 
       - name: Plan Terraform Changes
         run: terraform plan 
