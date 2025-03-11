@@ -40,8 +40,5 @@ jobs:
       - name: Initialize Terraform
         run: terraform init -backend-config="bucket=wordpress-terraform-bucket-${{env.TF_VAR_env}}" -backend-config="prefix=terraform/state" 
 
-      - name: Plan Terraform Changes
-        run: terraform plan 
-
       - name: Apply Terraform Changes
         run: terraform apply -auto-approve      
