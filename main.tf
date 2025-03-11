@@ -75,7 +75,7 @@ resource "cloudflare_dns_record" "wordpress_dns_cf" {
   count   = var.env == "dev" ? 1 : 0  # Create DNS records in Cloudflare for dev only
   zone_id = var.cloudflare_zone_id
   name    = var.domain
-  value   = google_compute_instance.wordpress_dev.network_interface[0].access_config[0].nat_ip
+  content   = google_compute_instance.wordpress_dev.network_interface[0].access_config[0].nat_ip
   type    = "A"
   ttl     = 300
   proxied = true
