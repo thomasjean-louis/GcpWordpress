@@ -13,13 +13,13 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
-      GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-      DOMAIN: ${{ secrets.DOMAIN }}
-      CLOUDFLARE_ZONE_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
-      ENV: ${{ secrets.ENV}}
-      EMAIL: ${{ secrets.EMAIL}}
-      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      TF_VAR_gcp_credentials: ${{ secrets.GCP_CREDENTIALS }}
+      TF_VAR_gcp_project_id: ${{ secrets.GCP_PROJECT_ID }}
+      TF_VAR_domain: ${{ secrets.DOMAIN }}
+      TF_VAR_cloudflare_zone_id: ${{ secrets.CLOUDFLARE_ZONE_ID }}
+      TF_VAR_env: ${{ secrets.ENV}}
+      TF_VAR_email: ${{ secrets.EMAIL}}
+      TF_VAR_cloudflare_api_token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
 
 
     steps:
