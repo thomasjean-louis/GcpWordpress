@@ -11,6 +11,7 @@ permissions:
 jobs:
   terraform:
     runs-on: ubuntu-latest
+    environment: ${{ github.ref == 'refs/heads/main' && 'prod' || github.ref == 'refs/heads/dev' && 'dev' }}
 
     env:
       TF_VAR_gcp_credentials: ${{ secrets.GCP_CREDENTIALS }}
