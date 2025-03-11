@@ -1,5 +1,5 @@
 variable "gcp_credentials" {
-  description = "The GCP credentials file for the environment"
+  description = "The GCP credentials for the environment"
   type        = string
 }
 
@@ -24,10 +24,6 @@ variable "region" {
   default     = "europe-west4"
 }
 
-variable "credentials_file" {
-  description = "Path to GCP credentials file"
-  type        = string
-}
 
 variable "domain" {
   description = "Domain name for the website"
@@ -38,7 +34,6 @@ variable "email" {
   description = "Email for Let's Encrypt SSL certificate"
   type        = string
 }
-
 
 variable "cloudflare_zone_id" {
   description = "The Cloudflare zone ID for the domain"
