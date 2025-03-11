@@ -69,13 +69,9 @@ resource "google_compute_instance" "wordpress_dev" {
 }
 
 
-output "wordpress_public_ip" {
-  value = google_compute_instance.wordpress_dev.network_interface[0].access_config[0].nat_ip
-}
-
 
 # Cloudflare configuration for HTTPS
-resource "cloudflare_record" "wordpress_dns_cf" {
+resource "cloudflare_dns_record" "wordpress_dns_cf" {
   count   = var.env == "dev" ? 1 : 0  # Create DNS records in Cloudflare for dev only
   zone_id = var.cloudflare_zone_id
   name    = var.domain
