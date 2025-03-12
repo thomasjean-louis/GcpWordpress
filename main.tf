@@ -41,7 +41,7 @@ resource "google_compute_instance" "wordpress_dev" {
     sudo apt update 
 
     # Install NGINX, MySQL et PHP
-    sudo apt install -y nginx mysql-server php-fpm php-mysql unzip wget certbot python3-certbot-nginx
+    sudo apt install -y nginx mariadb-server php-fpm php-mysql unzip wget certbot python3-certbot-nginx
 
     # Start and activate services
     sudo systemctl start nginx
