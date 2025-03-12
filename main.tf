@@ -37,23 +37,69 @@ resource "google_compute_instance" "wordpress_dev" {
   }
 
   metadata_startup_script = <<-EOT
-    #! /bin/bash
-    # Install LAMP stack and WordPress
-    apt-get update
-    apt-get install -y apache2 mysql-server php php-mysql libapache2-mod-php wget curl
+     #! /bin/bash
+    sudo apt update && sudo apt upgrade -y
+
+    # Install NGINX, MySQL et PHP
+    sudo apt install -y nginx mysql-server php-fpm php-mysql unzip wget
+
+    # Start and activate services
+    sudo systemctl start nginx
+    sudo systemctl enable nginx
+    sudo systemctl start mysql
+    sudo systemctl enable mysql
+    sudo systemctl start php7.4-fpm
+    sudo systemctl enable php7.4-fpm
+
+    # Donwload and install WordPress
     wget https://wordpress.org/latest.tar.gz
-    tar -xzvf latest.tar.gz
-    mv wordpress/* /var/www/html/
-    chown -R www-data:www-data /var/www/html
-    systemctl enable apache2
-    systemctl start apache2
+    tar -xzf latest.tar.gz
+    sudo mv wordpress/* /var/www/html/
 
-    # Install Certbot for Let's Encrypt
-    apt-get install -y certbot python3-certbot-apache
-    certbot --apache --non-interactive --agree-tos -m ${var.email} -d ${var.domain}
+    # Configure permissions
+    sudo chown -R www-data:www-data /var/www/html
+    sudo chmod -R 755 /var/www/html
 
-    # Restart Apache to apply HTTPS
-    systemctl restart apache2
+    # Configure MySQL
+    sudo mysql -e "CREATE DATABASE wordpress;"
+    sudo mysql -e "CREATE USER 'wordpressuser'@'localhost' IDENTIFIED BY 'password';"
+    sudo mysql -e "GRANT ALL PRIVILEGES ON wordpress.* TO 'wordpressuser'@'localhost';"
+    sudo mysql -e "FLUSH PRIVILEGES;"
+
+    # Configure WordPress
+    sudo mv /var/www/html/wp-config-sample.php /var/www/html/wp-config.php
+    sudo sed -i "s/database_name_here/wordpress/g" /var/www/html/wp-config.php
+    sudo sed -i "s/username_here/wordpressuser/g" /var/www/html/wp-config.php
+    sudo sed -i "s/password_here/password/g" /var/www/html/wp-config.php
+
+    # Configure NGINX for WordPress
+    cat <<EOF | sudo tee /etc/nginx/sites-available/wordpress
+    server {
+        listen 80;
+        server_name ${var.domain};
+        root /var/www/html;
+        index index.php index.html index.htm;
+        location / {
+            try_files \$uri \$uri/ /index.php?\$args;
+        }
+        location ~ \.php$ {
+            include snippets/fastcgi-php.conf;
+            fastcgi_pass unix:/var/run/php/php7.4-fpm.sock;
+            fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
+            include fastcgi_params;
+        }
+    }
+    EOF
+    sudo ln -s /etc/nginx/sites-available/wordpress /etc/nginx/sites-enabled/
+    sudo nginx -t
+    sudo systemctl reload nginx
+
+    # Install Certbot for Let's Encrypt (auto-create TXT record in Cloudflare)
+    sudo apt install -y certbot python3-certbot-nginx
+    sudo certbot --nginx --non-interactive --agree-tos --email ${var.email} -d ${var.domain}
+
+    # Restart NGINX to enable SSL
+    sudo systemctl reload nginx
   EOT
 
   network_interface {
