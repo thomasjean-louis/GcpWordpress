@@ -38,10 +38,10 @@ resource "google_compute_instance" "wordpress_dev" {
  
   metadata_startup_script = <<-EOT
      #! /bin/bash
-    sudo apt update && sudo apt upgrade -y
+    sudo apt update 
 
     # Install NGINX, MySQL et PHP
-    sudo apt install -y nginx mysql-server php-fpm php-mysql unzip wget
+    sudo apt install -y nginx mysql-server php-fpm php-mysql unzip wget certbot python3-certbot-nginx
 
     # Start and activate services
     sudo systemctl start nginx
@@ -95,7 +95,6 @@ resource "google_compute_instance" "wordpress_dev" {
     sudo systemctl reload nginx
 
     # Install Certbot for Let's Encrypt (auto-create TXT record in Cloudflare)
-    sudo apt install -y certbot python3-certbot-nginx
     sudo certbot --nginx --non-interactive --agree-tos --email ${var.email} -d ${var.domain}
 
     # Restart NGINX to enable SSL
