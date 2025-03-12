@@ -35,6 +35,7 @@ resource "google_compute_instance" "wordpress_dev" {
       image = "debian-cloud/debian-11-bullseye-v20250212"  # Base OS image
     }
   }
+  
  
   metadata_startup_script = <<-EOT
      #! /bin/bash
@@ -123,5 +124,4 @@ resource "cloudflare_dns_record" "wordpress_dns_cf" {
   content   = google_compute_instance.wordpress_dev[0].network_interface[0].access_config[0].nat_ip
   type    = "A"
   ttl     = 1
-  proxied = true
 }
