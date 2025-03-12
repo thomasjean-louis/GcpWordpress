@@ -34,7 +34,7 @@ resource "google_compute_instance" "wordpress_dev" {
     initialize_params {
       image = "debian-cloud/debian-11-bullseye-v20250212"  # Base OS image
     }
-  }
+  } 
 
  metadata = {
    startup_script = <<-EOT
