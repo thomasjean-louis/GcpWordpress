@@ -36,7 +36,8 @@ resource "google_compute_instance" "wordpress_dev" {
     }
   }
 
-  metadata_startup_script = <<-EOT
+ metadata = {
+   startup_script = <<-EOT
      #! /bin/bash
     sudo apt update && sudo apt upgrade -y
 
@@ -101,6 +102,8 @@ resource "google_compute_instance" "wordpress_dev" {
     # Restart NGINX to enable SSL
     sudo systemctl reload nginx
   EOT
+ }
+  
 
   network_interface {
     network = "default"
