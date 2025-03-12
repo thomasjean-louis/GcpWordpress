@@ -24,6 +24,33 @@ provider "cloudflare" {
   api_token = var.cloudflare_api_token
 }
 
+resource "google_compute_firewall" "allow_http" {
+  name    = "allow-http"
+  network = "default"
+
+  allow {
+    protocol = "tcp"
+    ports    = ["80"]
+  }
+
+  source_ranges = ["0.0.0.0/0"]
+  target_tags   = ["http-server"]
+}
+
+resource "google_compute_firewall" "allow_https" {
+  name    = "allow-https"
+  network = "default"
+
+  allow {
+    protocol = "tcp"
+    ports    = ["443"]
+  }
+
+  source_ranges = ["0.0.0.0/0"]
+  target_tags   = ["https-server"]
+}
+
+
 resource "google_compute_instance" "wordpress_dev" {
   count        = var.env == "dev" ? 1 : 0  # Only create in dev environment
   name         = "wordpress-dev"
@@ -123,5 +150,5 @@ resource "cloudflare_dns_record" "wordpress_dns_cf" {
   name    = var.domain
   content   = google_compute_instance.wordpress_dev[0].network_interface[0].access_config[0].nat_ip
   type    = "A"
-  ttl     = 1
+  ttl     = 300
 }
