@@ -38,7 +38,6 @@ resource "google_compute_instance" "wordpress_dev" {
  
   metadata_startup_script = <<-EOT
      #! /bin/bash
-    sudo apt update && sudo apt upgrade -y
 
     # Install NGINX, MySQL et PHP
     sudo apt install -y nginx mysql-server php-fpm php-mysql unzip wget
