@@ -34,10 +34,9 @@ resource "google_compute_instance" "wordpress_dev" {
     initialize_params {
       image = "debian-cloud/debian-11-bullseye-v20250212"  # Base OS image
     }
-  } 
-
- metadata = {
-   startup_script = <<-EOT
+  }
+ 
+  metadata_startup_script = <<-EOT
      #! /bin/bash
     sudo apt update && sudo apt upgrade -y
 
@@ -102,8 +101,6 @@ resource "google_compute_instance" "wordpress_dev" {
     # Restart NGINX to enable SSL
     sudo systemctl reload nginx
   EOT
- }
-  
 
   network_interface {
     network = "default"
