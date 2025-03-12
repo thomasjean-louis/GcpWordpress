@@ -77,6 +77,6 @@ resource "cloudflare_dns_record" "wordpress_dns_cf" {
   name    = var.domain
   content   = google_compute_instance.wordpress_dev[0].network_interface[0].access_config[0].nat_ip
   type    = "A"
-  ttl     = 300
+  ttl     = 1
   proxied = true
 }
